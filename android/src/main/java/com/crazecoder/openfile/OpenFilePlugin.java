@@ -56,6 +56,7 @@ public class OpenFilePlugin implements MethodCallHandler
     private Result result;
     private String filePath;
     private String mimeType;
+    private String overridePermission = "false";
 
     private boolean isResultSubmitted = false;
 
@@ -75,7 +76,10 @@ public class OpenFilePlugin implements MethodCallHandler
             if (!isFileAvailable()) {
                 return;
             }
-            if (pathRequiresPermission()) {
+
+            overridePermission = call.hasArgument("override_permission") && call.argument("override_permission") != null ? call.argument("override_permission") : "false";
+
+            if (overridePermission == "false" && pathRequiresPermission()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isExternalStoragePublicMedia(mimeType)) {
                         if (isImage(mimeType) && !hasPermission(Manifest.permission.READ_MEDIA_IMAGES) && !Environment.isExternalStorageManager()) {

@@ -13,11 +13,13 @@ class OpenFile {
   OpenFile._();
   ///[filePath] On web you need to pass the file name to determine the file type
   ///[linuxDesktopName] like 'xdg'/'gnome'
+  ///[overridePermission] if true, the file will be opened without checking the file permission
   static Future<OpenResult> open(String? filePath,
       {String? type,
       String? uti,
       String linuxDesktopName = "xdg",
       bool linuxByProcess = false,
+      bool overridePermission = false,
       Uint8List? webData}) async {
     assert(filePath != null);
     if (!Platform.isMacOS && !Platform.isIOS && !Platform.isAndroid) {
@@ -51,6 +53,7 @@ class OpenFile {
       "file_path": filePath!,
       "type": type,
       "uti": uti,
+      "override_permission": overridePermission.toString(),
     };
     final _result = await _channel.invokeMethod('open_file', map);
     final resultMap = json.decode(_result) as Map<String, dynamic>;
