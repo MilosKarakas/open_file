@@ -12,6 +12,7 @@ class OpenFile {
       String? uti,
       String linuxDesktopName = "xdg",
       bool linuxByProcess = false,
+      bool overridePermission = false,
       Uint8List? webData}) async {
     if (filePath?.isNotEmpty == true && webData?.isNotEmpty == true) {
       final _b = await web.open(filePath, data: webData);
